@@ -1,6 +1,9 @@
-import { createAudioFileFromText } from "./text_to_speech_file";
+const { createAudioFileFromText } = require('./controller/text_to_speech_file')
 
-createAudioFileFromText("Hello my name is Suho Kim.")
+
+
+
+createAudioFileFromText("bang people are willing to do whatever they must .  ")
   .then((fileName) => {
     console.log(`Audio file created: ${fileName}`);
   })
