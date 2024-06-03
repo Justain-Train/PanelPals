@@ -1,7 +1,7 @@
 {
   "name": "screenreader",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,16 +10,17 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google-cloud/vision": "^4.3.0",
     "dotenv": "^16.4.5",
     "elevenlabs": "^0.6.0",
     "node-aplay": "^1.0.3",
     "node-wav-player": "^0.2.0",
     "play-sound": "^1.1.6",
-    "sound-play": "^1.1.0",
-    "typescript": "^5.4.5"
+    "sound-play": "^1.1.0"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
-    "@types/node": "^20.13.0"
+    "@types/node": "^20.13.0",
+    "typescript": "^5.4.5"
   }
 }
