@@ -26,7 +26,6 @@ export const createAudioFileFromText = async (
       audio.pipe(fileStream);
       fileStream.on("finish", () => resolve(fileName)); // Resolve with the fileName
       fileStream.on("error", reject);
-      
     } catch (error) {
       reject(error);
     }
