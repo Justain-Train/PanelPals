@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "SpeakEasyAi",
+  "description": "Enhance the experience of reading webtoons with another person. This app allows users to easily extract text from webtoon panels and generate natural-sounding speech, making it perfect for shared reading sessions or accessibility purposes.",
+  "version": "1.0",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "alarms",
+    "storage"
+  ],
+  "web_accessible_resources": [{
+     "matches": ["<all_urls>"],
+     "resources": ["./src/backend/controller/image_to_text_file.js","./src/backend/controller/text_to_speech.js"]
+   }],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.webtoons.com/*"
+      ],
+      "js": [ "./src/frontend/scripts/content_script.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "./src/frontend/scripts/background.js"
+  },
+  "action": {
+    "default_popup": "./src/frontend/popup.html",
+    "default_icon": "./src/frontend/public/images/Speakeasy.jpg"
+  }
+}
