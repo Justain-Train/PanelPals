@@ -1,11 +1,11 @@
-import { ImageAnnotatorClient } from '@google-cloud/vision';
+const {ImageAnnotatorClient} = require('@google-cloud/vision');
 require('dotenv').config();
 
 
 
 const client = new ImageAnnotatorClient();
 
-export const detectText = async (filePath) => {
+const detectText = async (filePath) => {
   try {
     const [result] = await client.textDetection(filePath);
     const detections = result.fullTextAnnotation;
@@ -17,5 +17,4 @@ export const detectText = async (filePath) => {
 }
 
 
-
-
+module.exports = { detectText };
