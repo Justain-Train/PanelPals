@@ -11,8 +11,9 @@ router.post('/generate-audio' , async (req,res) => {
   }
   
   try {
-    const audioFile = await createAudioFileFromText(text);
-    res.status(200).sendFile(audioFile);
+     await createAudioFileFromText(text).then((fileName) => {
+      res.status(200).sendFile(fileName, { root: './' });
+    });
   } catch(error) {
     console.error('Error generating audio file:', error);
     res.status(500).send("Error generating audio file");
