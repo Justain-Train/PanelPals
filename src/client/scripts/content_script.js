@@ -3,8 +3,10 @@
 let isAudioPlaying = false;
 let screenshotInterval = null;
 
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "cropImage") {
+
     cropImage(request.imageData, 100, 100, 800, 600)
       .then((croppedImage) => {
         sendResponse(true);
