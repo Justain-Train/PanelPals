@@ -8,10 +8,11 @@ startButton.addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs.length && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, { type: "startCapture" }, response => {
-        if (!response) {
-          console.error("Failed to send message:", chrome.runtime.lastError.message);
+        if (!response || response.error) {
+          statusDiv.innerText = ("Failed to start capture!", response.error);
         } else {
           console.log("Start Capture message sent successfully!");
+          statusDiv.innerText = "Started Capture of Screen!";
 
         }
       });
@@ -25,10 +26,11 @@ stopButton.addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs.length && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, { type: "stopCapture" }, response => {
-        if (!response) {
-          console.error("Failed to send message:", chrome.runtime.lastError.message);
+        if (!response || response.error) {
+          statusDiv.innerText = ("Failed to stop capture!", response.error);
         } else {
           console.log("Stop Capture message sent successfully!");
+          statusDiv.innerText = ("Stopped Capture of Screen!");
 
         }
       });
@@ -37,6 +39,9 @@ stopButton.addEventListener("click", () => {
     }
   });
 });
+
+
+
 
 
 
