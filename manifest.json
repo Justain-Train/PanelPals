@@ -16,7 +16,7 @@
 ],
   "web_accessible_resources": [{
      "matches": ["<all_urls>"],
-     "resources":["./src/client/scripts/bacgkround.js"]
+     "resources":["./src/client/scripts/bacgkround.js","output.wav"]
    }],
 
   "content_scripts": [
