@@ -1,6 +1,6 @@
 import { detectText, createAudioFileFromText } from "../api/api.js";
 
-let processedText = [];
+let prevText = "";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
@@ -29,9 +29,16 @@ function processImage(imageData, sendResponse) {
 
   detectText(formData)
     .then((text) => {
-      let textToProcess = removeProcessedText(text);
-      if (textToProcess.trim()) {
-        processedText.push(textToProcess);
+      
+      const prevTextnoSpace = prevText.replace(/\s+/g, ' ').trim();
+      const textWithoutnewLines= text.replace(/\s+/g, ' ').trim();
+      const textToProcess = replaceMatchingSubstringInStr1(textWithoutnewLines, prevTextnoSpace, '""');
+
+      console.log("textToProcess",textToProcess);
+      console.log("prevText",prevText);
+
+      if (text) {
+        prevText = text;
         createAudioFileFromText(textToProcess)
           .then((blob) => {
        
@@ -44,7 +51,7 @@ function processImage(imageData, sendResponse) {
             sendResponse({ error: "Error creating audio file" });
           });
       } else {
-        sendResponse({ error: "No new text detected" });
+        sendResponse({ noText: "No new text detected" });
       }
     })
     .catch((error) => {
@@ -53,12 +60,7 @@ function processImage(imageData, sendResponse) {
     });
 }
 
-function removeProcessedText(text) {
-  processedText.forEach((processed) => {
-    text = text.replace(processed, "");
-  });
-  return text;
-}
+
 
 function takeScreenshot(sendResponse) {
   chrome.tabs.captureVisibleTab(null, { format: "png" }, (imageData) => {
@@ -97,4 +99,43 @@ function base64ToBlob(base64, mimeType) {
     byteArrays.push(new Uint8Array(byteNumbers));
   }
   return new Blob(byteArrays, { type: mimeType });
+}
+
+// Function to find the longest common substring between two strings
+function findLongestCommonSubstring(str1, str2) {
+  const arr = Array(str1.length).fill(null).map(() => Array(str2.length).fill(null));
+  let longestSubstringLength = 0;
+  let longestSubstring = '';
+
+  for (let i = 0; i < str1.length; i++) {
+    for (let j = 0; j < str2.length; j++) {
+      if (str1[i] === str2[j]) {
+        if (i === 0 || j === 0) {
+          arr[i][j] = 1;
+        } else {
+          arr[i][j] = arr[i - 1][j - 1] + 1;
+        }
+
+        if (arr[i][j] > longestSubstringLength) {
+          longestSubstringLength = arr[i][j];
+          longestSubstring = str1.slice(i - longestSubstringLength + 1, i + 1);
+        }
+      } else {
+        arr[i][j] = 0;
+      }
+    }
+  }
+
+  return longestSubstring;
+}
+
+// Function to replace the longest common substring in str1 with a replacement string
+function replaceMatchingSubstringInStr1(str1, str2, replacement = '""') {
+  const longestCommonSubstring = findLongestCommonSubstring(str1, str2);
+
+  if (longestCommonSubstring.length > 10 ) {
+    const regex = new RegExp(longestCommonSubstring, 'g');
+    str1 = str1.replace(regex, replacement);
+  }
+  return str1;
 }

@@ -49,6 +49,11 @@ function handleCropImage(imageData, sendResponse) {
           if (!response || response.error) {
             console.error("Error:", response ? response.error : "Unknown error");
             sendResponse(false);
+          
+          }else if (response.noText) {
+            sendResponse(false);
+            screenshotInterval();
+            
           } else {
             isAudioPlaying = true;
             playAudio(response.audioUrl);
@@ -95,6 +100,7 @@ function playAudio(audioUrl) {
     chrome.runtime.sendMessage({ type: "audioFinished" });
   };
   audio.onerror = (error) => console.error("Error during audio playback:", error);
+  
 }
 
 function startCaptureInterval() {
